@@ -277,9 +277,6 @@ def generate_chunk(chunk_start:int, chunk_size: int, drivers: pd.DataFrame, weat
         size=early_mask.sum()
     )
 
-    arrival_act = arrival_est + np.round(delay).astype(int)
-    arrival_act = np.clip(arrival_act, 5, 400)
-
 
     idle_base = rng.gamma(
         shape=2.0,
@@ -303,6 +300,9 @@ def generate_chunk(chunk_start:int, chunk_size: int, drivers: pd.DataFrame, weat
     )
 
     idle_time = np.clip(idle_time, 0, 35)
+
+    arrival_act = arrival_est + np.round(delay + idle_time).astype(int)
+    arrival_act = np.clip(arrival_act, 5, 400)
 
 
     lateness = arrival_act - arrival_est
